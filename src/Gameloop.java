@@ -1,5 +1,3 @@
-import javax.print.attribute.standard.NumberOfInterveningJobs;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -81,13 +79,11 @@ public class Gameloop {
         boolean mängKäib = false;
 
         Tikutops tikutops = new Tikutops(tikke);
-
         tutorial();
         mängijad = setup();
 
-        Scanner input = new Scanner(System.in);
-
         while(true){
+            Scanner input = new Scanner(System.in);
             while(!mängKäib){
 
                 System.out.println("Mängijaid: " +mängijad.size() +" \t\t:\t\t Tikke topsis: " +tikutops.getTikud());
@@ -109,21 +105,17 @@ public class Gameloop {
                 }
 
                 System.out.println();
-
                 switch (valik){
 
                     case 1: // Mängu alustamine
                         while(tikutops.getTikud() >= 1){
-
                             for (Player p :mängijad){
-
                                 if(tikutops.getTikud() == 1){
                                     System.out.println("Laual on " +tikutops.getTikud() +" tikk.");
                                     System.out.println(p.getNimi() +" on kohustatud ära võtma viimase tiku.");
                                     System.out.println("\n\tKaotas: " +p.getNimi() +"\n");
                                     tikutops.setTikud(-1);
                                     break;
-
                                 }
                                 if (tikutops.getTikud() > 1){
                                     System.out.println("Laual on " +tikutops.getTikud() +" tikku");
@@ -132,8 +124,6 @@ public class Gameloop {
                                     tikutops.eemalda(p.play());
                                     System.out.println("\n");
                                 }
-
-
                             }
                         }
                         tikutops.setTikud(tikke);
@@ -170,14 +160,9 @@ public class Gameloop {
                         System.out.println("Vigane sisend.\n");
                         break;
                 }
-
-
             }
             break;
         }
-
-
-
     }
 
 }

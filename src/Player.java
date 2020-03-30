@@ -50,6 +50,14 @@ public class Player {
 
                 try{
                     tikkeEemaldada = Integer.parseInt(sisend);
+                    if (tikkeEemaldada > 3){
+                        tikkeEemaldada = 3;
+                        System.out.println("Maksimaalselt saab eemaldada 3 tikku oma käigu ajal.");
+                    }
+                    if (tikkeEemaldada <= 0){
+                        tikkeEemaldada = 1;
+                        System.out.println("Minimaalselt saab eemaldada 1 tiku oma käigu ajal,");
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Vigane sisend. Eemaldan 1 tiku");
                 }
