@@ -6,18 +6,11 @@
 
     Autor: Indrek Raudla, 2020
  */
-
-
 public class Main {
-
     public static void main(String[] args) {
 
-        System.out.println("aye");
-        Player player = new Player(false, 2);
-        player.play();
+        Gameloop gameloop = new Gameloop();
 
-        Tikutops tikutops = new Tikutops(30);
-        tikutops.toString();
-
+        gameloop.start();
     }
 }
