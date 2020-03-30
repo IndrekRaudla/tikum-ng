@@ -3,15 +3,20 @@ import java.util.Scanner;
 public class Player {
     private boolean isHuman;
     private int tikkeLaual;
+    private String nimi;
 
-    public Player(boolean isHuman) {
+    public Player(boolean isHuman, String nimi) {
         this.isHuman = isHuman;
+        this.nimi = nimi;
     }
 
     public void setTikkeLaual(int tikkeLaual) {
         this.tikkeLaual = tikkeLaual;
     }
 
+    public String getNimi() {
+        return nimi;
+    }
 
     // Testmeetod kontrollimaks, kas mängijad said ilusti loodud. Võib hiljem kustutada.
     public void hello(){
@@ -28,7 +33,7 @@ public class Player {
     public int play(){
         int maxEemaldada;
 
-        if(this.tikkeLaual >= 3){
+        if(this.tikkeLaual > 3){
             maxEemaldada = 3;
         } else {
             maxEemaldada = this.tikkeLaual;
@@ -56,17 +61,28 @@ public class Player {
 
         // ARVUTI
         else {
-            if (maxEemaldada > 3){
+            if (tikkeLaual > 3){
                 tikkeEemaldada = 3;
+
             } else {
-                tikkeEemaldada = maxEemaldada - 1;
+                tikkeEemaldada = tikkeLaual - 1;
                 if (tikkeEemaldada <= 0){
                     tikkeEemaldada = 1;
                 }
             }
         }
 
-        System.out.println("Tikutopsist eemaldati " +tikkeEemaldada +" tikku!");
+        if(tikkeLaual - tikkeEemaldada >= 1){
+            if (tikkeEemaldada > 1){
+                System.out.println("\tLaualt eemaldati " +tikkeEemaldada +" tikku!");
+            } else {
+                System.out.println("\tLaualt eemaldati " +tikkeEemaldada +" tikk!");
+            }
+        } else {
+            System.out.println("Eemaldati viimane tikk!");
+            System.out.println("\n\tKaotas: " +nimi +"\n");
+        }
+
         return tikkeEemaldada;
     }
 }

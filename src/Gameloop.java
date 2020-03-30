@@ -1,4 +1,5 @@
 import javax.print.attribute.standard.NumberOfInterveningJobs;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -24,7 +25,7 @@ public class Gameloop {
         Scanner input = new Scanner(System.in);
 
         while (true){
-            System.out.println("Mitu mängijat mängib?");
+            System.out.println("Mitu mängijat mängib? (2 - ...) ");
             String sisend = input.nextLine();
             try{
                 mängijaid = Integer.parseInt(sisend);
@@ -42,7 +43,7 @@ public class Gameloop {
         for (int i = 0; i < mängijaid; i++) {
             while(true){
                 boolean isHuman;
-                String mängijaNimi = "player" +i;
+                String mängijaNimi = "Mängija " +(i+1);
                 System.out.println("Kas " +(i+1) +". mängija on inimene? (Y/N)");
                 String sisend = input.nextLine().toLowerCase();
 
@@ -54,7 +55,7 @@ public class Gameloop {
                     } else {
                         throw new Exception();
                     }
-                    mängijad.add(new Player(isHuman));
+                    mängijad.add(new Player(isHuman, mängijaNimi));
                     break;
                 } catch (Exception e){
                     System.out.println("Vigane sisend! Proovi uuesti \n");
@@ -75,12 +76,108 @@ public class Gameloop {
 
 
     public void start(){
-        System.out.println("Hakkab pihta");
+        int tikke = 25;
+        int valik;
+        boolean mängKäib = false;
 
+        Tikutops tikutops = new Tikutops(tikke);
+
+        tutorial();
         mängijad = setup();
 
-        Tikutops tikutops = new Tikutops(3);
-        tikutops.toString();
+        Scanner input = new Scanner(System.in);
+
+        while(true){
+            while(!mängKäib){
+
+                System.out.println("Mängijaid: " +mängijad.size() +" \t\t:\t\t Tikke topsis: " +tikutops.getTikud());
+                System.out.println();
+                System.out.println("1 - Alusta mängu");
+                System.out.println("2 - Muuda tikutopsi suurust");
+                System.out.println("3 - Loo uued mängijad");
+                System.out.println("4 - Peata programm");
+
+                // Sisendikontroll
+                while(true){
+                    String sisend = input.nextLine();
+                    try{
+                        valik = Integer.parseInt(sisend);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Vigane sisend.");
+                    }
+                }
+
+                System.out.println();
+
+                switch (valik){
+
+                    case 1: // Mängu alustamine
+                        while(tikutops.getTikud() >= 1){
+
+                            for (Player p :mängijad){
+
+                                if(tikutops.getTikud() == 1){
+                                    System.out.println("Laual on " +tikutops.getTikud() +" tikk.");
+                                    System.out.println(p.getNimi() +" on kohustatud ära võtma viimase tiku.");
+                                    System.out.println("\n\tKaotas: " +p.getNimi() +"\n");
+                                    tikutops.setTikud(-1);
+                                    break;
+
+                                }
+                                if (tikutops.getTikud() > 1){
+                                    System.out.println("Laual on " +tikutops.getTikud() +" tikku");
+                                    System.out.println(p.getNimi() +" kord teha oma käik.");
+                                    p.setTikkeLaual(tikutops.getTikud());
+                                    tikutops.eemalda(p.play());
+                                    System.out.println("\n");
+                                }
+
+
+                            }
+                        }
+                        tikutops.setTikud(tikke);
+                        System.out.println();
+                        break;
+
+                    case 2: // Tikutopsi suuruse muutmine
+                        while(true){
+                            System.out.println("Sisesta uue tikutopsi suurus: ");
+                            String sisend = input.nextLine();
+                            int uusTikkudeArv;
+                            try{
+                                uusTikkudeArv = Integer.parseInt(sisend);
+                                if (uusTikkudeArv < 0){
+                                    throw new NumberFormatException();
+                                }
+                                tikke = uusTikkudeArv;
+                                muudaTikke(uusTikkudeArv, tikutops);
+                                break;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Vigane sisend. Proovi uuesti.\n");
+                            }
+                        }
+                        break;
+
+                    case 3: // Uute mängijate loomine
+                        setup();
+                        break;
+
+                    case 4: // Programmi sulgemine
+                        System.exit(1);
+
+                    default: // Peamenüüs vigane sisend
+                        System.out.println("Vigane sisend.\n");
+                        break;
+                }
+
+
+            }
+            break;
+        }
+
+
 
     }
+
 }

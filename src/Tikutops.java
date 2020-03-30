@@ -9,6 +9,10 @@ public class Tikutops {
         return tikud;
     }
 
+    public void eemalda(int i){
+        tikud -= i;
+    }
+
     public void setTikud(int tikud) {
         this.tikud = tikud;
     }
