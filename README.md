@@ -2,6 +2,6 @@
 
 Tikumäng. Programmiga saab mängida mängu, kus laual on juhuslik arv tikku. Mängijad võtavad sealt kordamööda ära kas üks, kaks või kolm tikku. Kes võtab viimase tiku, on kaotaja.
 
->Programm peab sisaldama juhusliku suuruse kasutamist (soovitavalt klassi Random abil).
-
->reworki krdi bot et ta ei laseks nt 7-> 4 peale
+Ainult klassid on eraldi Klassid.rar arhiivis
+Projektikirjeldus on kirjeldus.pdf
+Üleüldises pildis on siin terve intellij projekt.
