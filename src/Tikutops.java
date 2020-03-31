@@ -1,3 +1,5 @@
+// Lihtne klass mis vastutab tikkude arvuga laual.
+// Ma eeldan, et seda seletama lahti ei pea, kuna tegu on nii lihtsa klassiga.
 public class Tikutops {
     private int tikud;
 

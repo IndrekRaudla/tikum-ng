@@ -8,6 +8,8 @@
  */
 public class Main {
     public static void main(String[] args) {
+
+        // Luuakse gameloop isend ja pannakse see käima. Kogu mänguloogika ja sellega seonduv toimub vastava klassi/objekti sees.
         Gameloop gameloop = new Gameloop();
         gameloop.start();
     }

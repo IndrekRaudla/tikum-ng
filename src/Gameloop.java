@@ -3,8 +3,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Gameloop {
+
+    // Mängijate nimekiri
     private List<Player> mängijad;
 
+    // Mängujuhendi väljastamiseks loodud meetod
     public void tutorial(){
         System.out.println("Tikumäng\n");
         System.out.println("Mäng on loodud kahele mängijale.");
@@ -14,14 +17,26 @@ public class Gameloop {
     }
 
 
+    // Meetod, millega luuakse mängijad.
+    // Valida saab mängijate arvu ning selle, kas mängija on inimene või mängib soovitud mängija eest arvuti.
+    // Nimi genereeritakse automaatselt (Mängija i), kus i = mängija number.
+    // Rangelt soovituslik on mängida kahekesi (või ka lihtsalt arvuti vastu), kuna mängu olemuse pärast on võimalik
+    // teha koostööd nii, et alati kaotab teatud mängija.
+    // Kuid samas, alat ion seltsis segasem, ning alati võib ka mitmekesi mängida.
+    // Tagastab mängijate nimekirja
+
+    // Sidenote - Mängijate arv võiks olla teoorias vähemalt 3x(mängijate arv - 1), kuna siis saaksid kõik vähemalt
+    // ühe käigu käia, kuid ma ei näe vajadust sellist reeglit peale suruda.
     public List<Player> setup(){
-        System.out.println("Toimub mängijate loomine.");
+        System.out.println("Toimub mängijate loomine.\n");
         System.out.println("Soovituslik on mängida KAHEKESI.");
 
         mängijad = new ArrayList<Player>();
+        // Mängijate arv väärtustatakse kaheks, kuid kohe küsitakse üle, mitu mängijat mängib.
         int mängijaid = 2;
         Scanner input = new Scanner(System.in);
 
+        // while loop kuniks on sisestatud korrektne arv mängijaid.
         while (true){
             System.out.println("Mitu mängijat mängib? (2 - ...) ");
             String sisend = input.nextLine();
@@ -38,6 +53,8 @@ public class Gameloop {
         }
         System.out.println();
 
+        // Iga mängija kohta küsitakse, kas tegu on inimese või arvutiga ning seejärel väärtustatakse neile
+        // vastav tõeväärtus ning luuakse Player isend mis lisatakse ka ennem tehtud listi.
         for (int i = 0; i < mängijaid; i++) {
             while(true){
                 boolean isHuman;
@@ -67,24 +84,32 @@ public class Gameloop {
     }
 
     // Saab muuta mängu alguses laual olevat tikkude arvu
+    // Tegelikult ebavajalik meetod, kuna tikutops.setTikud töötaks ka mujal, kuid see teeb hiljem mänguloogikas natukene
+    // viisakamaks koodi.
     public void muudaTikke(int tikkudeArv, Tikutops tikutops){
         System.out.println("Uus tikkude arv laual on " +tikkudeArv +".\n");
         tikutops.setTikud(tikkudeArv);
     }
 
 
+    // Mänguloogika meetod, mis käib kogu mängu käimise ajal
+    // Menüüs saab valida nelja valiku vahel [Alusta mängu, Muuda tikutopsi suurust, Loo uued mängijad, Peata programm]
     public void start(){
         int tikke = 25;
         int valik;
-        boolean mängKäib = false;
 
+        // Ennem kui menüüsse minnakse, luuakse ära mängijad ja näidatakse mängureeglid ette. Mõlemat saab hiljem muuta
+        // Lisaks tehakse ära tikutops, mis vahendab kogu mängu jooksul infot tikkude kohta laual.
         Tikutops tikutops = new Tikutops(tikke);
         tutorial();
         mängijad = setup();
 
+        // See vajaks natukene ümberkirjutamist et olla efektiivsem, kuid hetkel pole vajadust.
+        // (Kuna ma alguses ei plaaninud switche kasutada, kuid hiljem otsustasin ümber, siis on üks while(true) tsükkel liiga palju hetkel)
+
         while(true){
             Scanner input = new Scanner(System.in);
-            while(!mängKäib){
+            while(true){
 
                 System.out.println("Mängijaid: " +mängijad.size() +" \t\t:\t\t Tikke topsis: " +tikutops.getTikud());
                 System.out.println();
@@ -105,11 +130,19 @@ public class Gameloop {
                 }
 
                 System.out.println();
+
+                // Switch vastavalt menüü valikule. Default vastus on menüüs edasi olemine. Kui sisend on int
+                // siis laetakse menüü uuesti.
                 switch (valik){
 
-                    case 1: // Mängu alustamine
+                    // Mängu alustamine
+                    // Nimekirjas olevad mängijad hakkavad kordamööda eemaldama laualt tikke, kuni lauale jääb 1 tikk
+                    // Seejärel kuulutatakse välja kaotaja ning minnakse tagasi peamenüüsse
+                    case 1:
                         while(tikutops.getTikud() >= 1){
                             for (Player p :mängijad){
+                                // Kui laual on järgi 1 tikk, siis mängija on kohustatud selle ära võtma, ning kaotab
+                                // seega mängu
                                 if(tikutops.getTikud() == 1){
                                     System.out.println("Laual on " +tikutops.getTikud() +" tikk.");
                                     System.out.println(p.getNimi() +" on kohustatud ära võtma viimase tiku.");
@@ -117,6 +150,8 @@ public class Gameloop {
                                     tikutops.setTikud(-1);
                                     break;
                                 }
+                                // Kui laual on rohkem kui 1 tikk, siis saab mängija oma käigu teha ning järgneb (üldjuhul)
+                                // Ka järgmise mängija käik
                                 if (tikutops.getTikud() > 1){
                                     System.out.println("Laual on " +tikutops.getTikud() +" tikku");
                                     System.out.println(p.getNimi() +" kord teha oma käik.");
@@ -126,11 +161,14 @@ public class Gameloop {
                                 }
                             }
                         }
+                        // "Tikutopsi"/lauale pannakse uuesti mängueelne arv tikke tagasi
                         tikutops.setTikud(tikke);
                         System.out.println();
                         break;
 
-                    case 2: // Tikutopsi suuruse muutmine
+                    // Tikutopsi suuruse muutmine toimib läbi lisameetodi.
+                    // Lisaks kontrollitakse ja oodatakse sobivat sisendit, kuni kasutaja selle ka sisestab (täisarv)
+                    case 2:
                         while(true){
                             System.out.println("Sisesta uue tikutopsi suurus: ");
                             String sisend = input.nextLine();
@@ -149,20 +187,22 @@ public class Gameloop {
                         }
                         break;
 
-                    case 3: // Uute mängijate loomine
+                    // Uute mängijate loomine läbi abimeetodi
+                    case 3:
                         setup();
                         break;
 
-                    case 4: // Programmi sulgemine
+                    // Programmi sulgemine
+                    case 4:
+                        System.out.println("Programm suletakse.");
                         System.exit(1);
 
-                    default: // Peamenüüs vigane sisend
+                    // Peamenüüs vigane sisend, väljastatakse veateade ning oodatakse uut sisendit
+                    default:
                         System.out.println("Vigane sisend.\n");
                         break;
                 }
             }
-            break;
         }
     }
-
 }
